@@ -2,6 +2,8 @@ import streamlit as st
 import json
 import os
 
+st.set_page_config(page_title="Shady Sluggers", page_icon="🥎")
+
 # Define softball positions
 POSITIONS = [
     "Pitcher", "Catcher", "First Base", "Second Base", "Third Base",
