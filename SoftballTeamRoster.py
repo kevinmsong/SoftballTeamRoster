@@ -39,7 +39,7 @@ def main():
         new_player = st.text_input("Enter player name")
         new_position = st.selectbox("Select position", POSITIONS, key="new_position")
         submit_button = st.form_submit_button(label='Add Player')
-        if submit_button and new_player and new_position:
+        if submit_button and new_player and new_position:if submit_button and new_player and new_position:
             if new_player not in roster_data["roster"]:
                 roster_data["roster"].append(new_player)
                 roster_data["positions"][new_player] = new_position
@@ -50,7 +50,7 @@ def main():
                 st.error(f"Player '{new_player}' already exists in the roster.")
 
     # Display and manage roster
-    st.subheader("Roster Management")st.subheader("Roster Management")
+    st.subheader("Roster Management")
     updated = False
     for i, player in enumerate(roster_data["roster"]):
         col1, col2, col3 = st.columns([3, 2, 2])
