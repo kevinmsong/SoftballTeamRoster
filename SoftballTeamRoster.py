@@ -50,7 +50,7 @@ def main():
                 st.error(f"Player '{new_player}' already exists in the roster.")
 
     # Display and manage roster
-    st.subheader("Current Roster")
+    st.subheader("Roster Management")st.subheader("Roster Management")
     updated = False
     for i, player in enumerate(roster_data["roster"]):
         col1, col2, col3 = st.columns([3, 2, 2])
@@ -106,7 +106,7 @@ def main():
         st.rerun()
 
     # Display final roster with positions and alternates
-    st.markdown("## Final Roster with Positions and Alternates")
+    st.markdown("## Batting Order with Positions and Alternates")
     for i, player in enumerate(roster_data["roster"]):
         position = roster_data["positions"][player]
         alternate = roster_data["alternates"][player]
