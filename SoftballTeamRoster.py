@@ -5,7 +5,7 @@ import os
 st.set_page_config(page_title="Shady Sluggers", page_icon="🥎", layout="wide")
 
 # Custom CSS for mobile optimization
-st.markdown("""POSITIONS = [
+st.markdown("""
 <style>
     .stButton > button {
         width: 100%;
@@ -87,7 +87,7 @@ def main():
                 "Position",
                 POSITIONS,
                 index=POSITIONS.index(roster_data["positions"][player]),
-                key=f"pos_{i}"key=f"pos_{i}"
+                key=f"pos_{i}"
             )
             if position != roster_data["positions"][player]:
                 roster_data["positions"][player] = position
