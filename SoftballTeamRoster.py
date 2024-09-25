@@ -12,7 +12,7 @@ st.markdown("""
         padding: 0.1rem 0.5rem;
         font-size: 0.8rem;
     }
-    .stSelectbox, .stTextInput {.stSelectbox, .stTextInput {
+    .stSelectbox, .stTextInput {
         padding: 0.1rem;
         font-size: 0.8rem;
     }
@@ -22,13 +22,15 @@ st.markdown("""
     .inline-buttons {
         display: flex;
         justify-content: space-between;
+        gap: 5px;
     }
     .inline-buttons .stButton {
-        flex-grow: 1;
-        margin-right: 2px;
+        flex: 1;
     }
-    .inline-buttons .stButton:last-child {
-        margin-right: 0;
+    .inline-buttons .stButton button {
+        width: 100%;
+        padding: 0.1rem;
+        font-size: 0.8rem;
     }
     .version {
         font-size: 0.8rem;
@@ -163,7 +165,8 @@ def roster_management_page():
                     updated = True
 
             # Inline buttons
-            col4, col5, col6 = st.columns([1, 1, 1])
+            st.markdown("<div class='inline-buttons'>", unsafe_allow_html=True)
+            col4, col5, col6 = st.columns(3)
             with col4:
                 if st.button("❌", key=f"remove_{i}", help="Remove player"):
                     roster_data["roster"].remove(player)
@@ -180,10 +183,11 @@ def roster_management_page():
                 if st.button("⬇️", key=f"down_{i}", help="Move down", disabled=(i == len(roster_data["roster"]) - 1)):
                     roster_data["roster"][i], roster_data["roster"][i+1] = roster_data["roster"][i+1], roster_data["roster"][i]
                     updated = True
+            st.markdown("</div>", unsafe_allow_html=True)
             
             st.markdown("</div>", unsafe_allow_html=True)
 
-    # Save changes if any updates were made
+    # Save changes if any updates were made# Save changes if any updates were made
     if updated:
         save_roster(roster_data)
         st.rerun()
@@ -208,7 +212,7 @@ def batting_order_page():
     st.markdown("</div>", unsafe_allow_html=True)
 
 def main():
-    st.title("🥎Shady Sluggers Team Roster🙏")
+    st.title("🥎 Shady Sluggers Team Roster 🙏")
     st.markdown("<p class='version'>Version 1.2</p>", unsafe_allow_html=True)
 
     # Navigation
