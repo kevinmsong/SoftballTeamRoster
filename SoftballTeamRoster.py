@@ -2,7 +2,25 @@ import streamlit as st
 import json
 import os
 
-st.set_page_config(page_title="Shady Sluggers", page_icon="🥎")
+st.set_page_config(page_title="Shady Sluggers", page_icon="🥎", layout="wide")
+
+# Custom CSS for mobile optimization
+st.markdown("""POSITIONS = [
+<style>
+    .stButton > button {
+        width: 100%;
+        padding: 0.1rem 0.5rem;
+        font-size: 0.8rem;
+    }
+    .stSelectbox, .stTextInput {
+        padding: 0.1rem;
+        font-size: 0.8rem;
+    }
+    .row-widget.stButton {
+        margin-bottom: 0.5rem;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # Define softball positions
 POSITIONS = [
@@ -24,7 +42,7 @@ def save_roster(data):
         json.dump(data, f)
 
 def main():
-    st.title("Shady Sluggers Team Roster Management")
+    st.title("Shady Sluggers Team Roster")
 
     # Load roster data
     roster_data = load_roster()
@@ -38,9 +56,13 @@ def main():
 
     # Add player form
     with st.form(key='add_player_form'):
-        new_player = st.text_input("Enter player name")
-        new_position = st.selectbox("Select position", POSITIONS, key="new_position")
-        submit_button = st.form_submit_button(label='Add Player')
+        col1, col2, col3 = st.columns([2, 2, 1])
+        with col1:
+            new_player = st.text_input("Player name", key="new_player_input")
+        with col2:
+            new_position = st.selectbox("Position", POSITIONS, key="new_position")
+        with col3:
+            submit_button = st.form_submit_button(label='Add')
         if submit_button and new_player and new_position:
             if new_player not in roster_data["roster"]:
                 roster_data["roster"].append(new_player)
@@ -49,13 +71,13 @@ def main():
                 save_roster(roster_data)
                 st.rerun()
             else:
-                st.error(f"Player '{new_player}' already exists in the roster.")
+                st.error(f"'{new_player}' already exists.")
 
     # Display and manage roster
     st.subheader("Roster Management")
     updated = False
     for i, player in enumerate(roster_data["roster"]):
-        col1, col2, col3 = st.columns([3, 2, 2])
+        col1, col2, col3, col4, col5, col6 = st.columns([2, 2, 2, 1, 1, 1])
         
         with col1:
             st.write(f"{i+1}. {player}")
@@ -65,7 +87,7 @@ def main():
                 "Position",
                 POSITIONS,
                 index=POSITIONS.index(roster_data["positions"][player]),
-                key=f"pos_{i}"
+                key=f"pos_{i}"key=f"pos_{i}"
             )
             if position != roster_data["positions"][player]:
                 roster_data["positions"][player] = position
@@ -81,26 +103,22 @@ def main():
                 roster_data["alternates"][player] = alternate
                 updated = True
 
-        col4, col5, col6 = st.columns([1, 1, 1])
-        
         with col4:
-            if st.button("Remove", key=f"remove_{i}", use_container_width=True):
+            if st.button("❌", key=f"remove_{i}", help="Remove player"):
                 roster_data["roster"].remove(player)
                 del roster_data["positions"][player]
                 del roster_data["alternates"][player]
                 updated = True
         
         with col5:
-            if st.button("⬆️", key=f"up_{i}", use_container_width=True, disabled=(i == 0)):
+            if st.button("⬆️", key=f"up_{i}", help="Move up", disabled=(i == 0)):
                 roster_data["roster"][i], roster_data["roster"][i-1] = roster_data["roster"][i-1], roster_data["roster"][i]
                 updated = True
         
         with col6:
-            if st.button("⬇️", key=f"down_{i}", use_container_width=True, disabled=(i == len(roster_data["roster"]) - 1)):
+            if st.button("⬇️", key=f"down_{i}", help="Move down", disabled=(i == len(roster_data["roster"]) - 1)):
                 roster_data["roster"][i], roster_data["roster"][i+1] = roster_data["roster"][i+1], roster_data["roster"][i]
                 updated = True
-
-        st.write("---")  # Add a horizontal line for separation
 
     # Save changes if any updates were made
     if updated:
@@ -108,17 +126,14 @@ def main():
         st.rerun()
 
     # Display final roster with positions and alternates
-    st.markdown("## Batting Order with Positions and Alternates")
+    st.markdown("## Batting Order")
     for i, player in enumerate(roster_data["roster"]):
         position = roster_data["positions"][player]
         alternate = roster_data["alternates"][player]
+        st.markdown(f"**{i+1}. {player}** - {position}")
         if alternate:
-            st.markdown(f"### {i+1}. {player}")
-            st.write(f"Position: {position} | Alternate: {alternate}")
-        else:
-            st.markdown(f"### {i+1}. {player}")
-            st.write(f"Position: {position}")
-        st.write("---")  # Add a horizontal line for separation
+            st.write(f"Alternate: {alternate}")
+        st.write("---")
 
 if __name__ == "__main__":
     main()
