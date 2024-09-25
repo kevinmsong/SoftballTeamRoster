@@ -12,7 +12,7 @@ st.markdown("""
         padding: 0.1rem 0.5rem;
         font-size: 0.8rem;
     }
-    .stSelectbox, .stTextInput {
+    .stSelectbox, .stTextInput {.stSelectbox, .stTextInput {
         padding: 0.1rem;
         font-size: 0.8rem;
     }
@@ -49,12 +49,28 @@ st.markdown("""
         padding-bottom: 0.5rem;
         border-bottom: 1px solid #f0f0f0;
     }
-    .player-row:last-child {
-        border-bottom: none;
-    }
     .batting-order .player-row {
-        margin-bottom: 0.25rem;
-        padding-bottom: 0.25rem;
+        margin: 0;
+        padding: 0.1rem 0;
+        border-bottom: none;
+        line-height: 1.2;
+    }
+    .batting-order .player-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .batting-order .player-name {
+        font-weight: bold;
+    }
+    .batting-order .player-position {
+        color: #666;
+        font-size: 0.9em;
+    }
+    .batting-order .player-alternate {
+        font-size: 0.8em;
+        color: #888;
+        margin-left: 1em;
     }
     .st-ae {
         gap: 0.5rem;
@@ -180,15 +196,19 @@ def batting_order_page():
     for i, player in enumerate(roster_data["roster"]):
         position = roster_data["positions"][player]
         alternate = roster_data["alternates"][player]
-        st.markdown(f"<div class='player-row'>", unsafe_allow_html=True)
-        st.markdown(f"**{i+1}. {player}** - {position}")
-        if alternate:
-            st.markdown(f"<small>Alternate: {alternate}</small>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class='player-row'>
+            <div class='player-info'>
+                <span class='player-name'>{i+1}. {player}</span>
+                <span class='player-position'>{position}</span>
+            </div>
+            {f"<div class='player-alternate'>Alt: {alternate}</div>" if alternate else ""}
+        </div>
+        """, unsafe_allow_html=True)""", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 def main():
-    st.title("Shady Sluggers Team Roster")
+    st.title("🥎Shady Sluggers Team Roster🙏")
     st.markdown("<p class='version'>Version 1.2</p>", unsafe_allow_html=True)
 
     # Navigation
