@@ -142,7 +142,7 @@ def roster_management_page():
                     key=f"alt_{i}",
                     label_visibility="collapsed"
                 )
-                if alternate != roster_data["alternates"][player]:st.markdown("""
+                if alternate != roster_data["alternates"][player]:
                     roster_data["alternates"][player] = alternate
                     updated = True
 
