@@ -202,7 +202,7 @@ def batting_order_page():
                 <span class='player-name'>{i+1}. {player}</span>
                 <span class='player-position'>{position}</span>
             </div>
-            {f"<div class='player-alternate'>Alt: {alternate}</div>" if alternate else ""}
+            {f"<div class='player-alternate'>Alternate: {alternate}</div>" if alternate else ""}
         </div>
         """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
