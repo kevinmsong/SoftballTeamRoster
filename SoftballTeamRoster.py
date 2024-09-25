@@ -4,7 +4,7 @@ import os
 
 st.set_page_config(page_title="Shady Sluggers", page_icon="🥎", layout="wide")
 
-# Custom CSS for mobile optimization
+# Custom CSS for mobile optimization and layout
 st.markdown("""
 <style>
     .stButton > button {
@@ -30,6 +30,20 @@ st.markdown("""
     .inline-buttons .stButton:last-child {
         margin-right: 0;
     }
+    .version {
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: -1rem;
+        margin-bottom: 1rem;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .nav-buttons .stButton {
+        margin: 0 0.5rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -52,9 +66,9 @@ def save_roster(data):
     with open(ROSTER_FILE, "w") as f:
         json.dump(data, f)
 
-def main():
-    st.title("Shady Sluggers Team Roster")
-
+def roster_management_page():
+    st.subheader("Roster Management")
+    
     # Load roster data
     roster_data = load_roster()
 
@@ -85,7 +99,6 @@ def main():
                 st.error(f"'{new_player}' already exists.")
 
     # Display and manage roster
-    st.subheader("Roster Management")
     updated = False
     for i, player in enumerate(roster_data["roster"]):
         col1, col2, col3 = st.columns([1, 1, 1])
@@ -102,7 +115,7 @@ def main():
             )
             if position != roster_data["positions"][player]:
                 roster_data["positions"][player] = position
-                updated = Trueupdated = True
+                updated = True
         
         with col3:
             alternate = st.text_input(
@@ -134,15 +147,17 @@ def main():
                     roster_data["roster"][i], roster_data["roster"][i+1] = roster_data["roster"][i+1], roster_data["roster"][i]
                     updated = True
 
-        st.markdown("---")
+        st.markdown("---")st.markdown("---")
 
     # Save changes if any updates were made
     if updated:
         save_roster(roster_data)
         st.rerun()
 
-    # Display final roster with positions and alternates
-    st.markdown("## Batting Order")
+def batting_order_page():
+    st.subheader("Batting Order")
+    roster_data = load_roster()
+    
     for i, player in enumerate(roster_data["roster"]):
         position = roster_data["positions"][player]
         alternate = roster_data["alternates"][player]
@@ -150,6 +165,35 @@ def main():
         if alternate:
             st.write(f"Alternate: {alternate}")
         st.write("---")
+
+def main():
+    st.title("Shady Sluggers Team Roster")
+    st.markdown("<p class='version'>Version 1.2</p>", unsafe_allow_html=True)
+
+    # Navigation
+    st.markdown("<div class='nav-buttons'>", unsafe_allow_html=True)
+    col1, col2 = st.columns(2)
+    with col1:
+        roster_button = st.button("Roster Management")
+    with col2:
+        order_button = st.button("Batting Order")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Page state
+    if 'page' not in st.session_state:
+        st.session_state.page = 'roster'
+
+    # Navigation logic
+    if roster_button:
+        st.session_state.page = 'roster'
+    elif order_button:
+        st.session_state.page = 'order'
+
+    # Display the appropriate page
+    if st.session_state.page == 'roster':
+        roster_management_page()
+    else:
+        batting_order_page()
 
 if __name__ == "__main__":
     main()
