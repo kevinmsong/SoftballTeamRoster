@@ -19,6 +19,17 @@ st.markdown("""
     .row-widget.stButton {
         margin-bottom: 0.5rem;
     }
+    .inline-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+    .inline-buttons .stButton {
+        flex-grow: 1;
+        margin-right: 2px;
+    }
+    .inline-buttons .stButton:last-child {
+        margin-right: 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -77,7 +88,7 @@ def main():
     st.subheader("Roster Management")
     updated = False
     for i, player in enumerate(roster_data["roster"]):
-        col1, col2, col3, col4, col5, col6 = st.columns([2, 2, 2, 1, 1, 1])
+        col1, col2, col3 = st.columns([1, 1, 1])
         
         with col1:
             st.write(f"{i+1}. {player}")
@@ -93,7 +104,7 @@ def main():
                 roster_data["positions"][player] = position
                 updated = True
         
-        with col3:
+        with col3:with col3:
             alternate = st.text_input(
                 "Alternate",
                 value=roster_data["alternates"][player],
@@ -103,22 +114,27 @@ def main():
                 roster_data["alternates"][player] = alternate
                 updated = True
 
-        with col4:
-            if st.button("❌", key=f"remove_{i}", help="Remove player"):
-                roster_data["roster"].remove(player)
-                del roster_data["positions"][player]
-                del roster_data["alternates"][player]
-                updated = True
-        
-        with col5:
-            if st.button("⬆️", key=f"up_{i}", help="Move up", disabled=(i == 0)):
-                roster_data["roster"][i], roster_data["roster"][i-1] = roster_data["roster"][i-1], roster_data["roster"][i]
-                updated = True
-        
-        with col6:
-            if st.button("⬇️", key=f"down_{i}", help="Move down", disabled=(i == len(roster_data["roster"]) - 1)):
-                roster_data["roster"][i], roster_data["roster"][i+1] = roster_data["roster"][i+1], roster_data["roster"][i]
-                updated = True
+        # Inline buttons
+        with st.container():
+            col4, col5, col6 = st.columns([1, 1, 1])
+            with col4:
+                if st.button("❌", key=f"remove_{i}", help="Remove player"):
+                    roster_data["roster"].remove(player)
+                    del roster_data["positions"][player]
+                    del roster_data["alternates"][player]
+                    updated = True
+            
+            with col5:
+                if st.button("⬆️", key=f"up_{i}", help="Move up", disabled=(i == 0)):
+                    roster_data["roster"][i], roster_data["roster"][i-1] = roster_data["roster"][i-1], roster_data["roster"][i]
+                    updated = True
+            
+            with col6:
+                if st.button("⬇️", key=f"down_{i}", help="Move down", disabled=(i == len(roster_data["roster"]) - 1)):
+                    roster_data["roster"][i], roster_data["roster"][i+1] = roster_data["roster"][i+1], roster_data["roster"][i]
+                    updated = True
+
+        st.markdown("---")
 
     # Save changes if any updates were made
     if updated:
