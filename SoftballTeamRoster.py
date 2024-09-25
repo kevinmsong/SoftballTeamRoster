@@ -17,7 +17,7 @@ st.markdown("""
         font-size: 0.8rem;
     }
     .row-widget.stButton {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
     }
     .inline-buttons {
         display: flex;
@@ -43,6 +43,21 @@ st.markdown("""
     }
     .nav-buttons .stButton {
         margin: 0 0.5rem;
+    }
+    .player-row {
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .player-row:last-child {
+        border-bottom: none;
+    }
+    .batting-order .player-row {
+        margin-bottom: 0.25rem;
+        padding-bottom: 0.25rem;
+    }
+    .st-ae {
+        gap: 0.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -101,34 +116,37 @@ def roster_management_page():
     # Display and manage roster
     updated = False
     for i, player in enumerate(roster_data["roster"]):
-        col1, col2, col3 = st.columns([1, 1, 1])
-        
-        with col1:
-            st.write(f"{i+1}. {player}")
-        
-        with col2:
-            position = st.selectbox(
-                "Position",
-                POSITIONS,
-                index=POSITIONS.index(roster_data["positions"][player]),
-                key=f"pos_{i}"
-            )
-            if position != roster_data["positions"][player]:
-                roster_data["positions"][player] = position
-                updated = True
-        
-        with col3:
-            alternate = st.text_input(
-                "Alternate",
-                value=roster_data["alternates"][player],
-                key=f"alt_{i}"
-            )
-            if alternate != roster_data["alternates"][player]:
-                roster_data["alternates"][player] = alternate
-                updated = True
-
-        # Inline buttons
         with st.container():
+            st.markdown(f"<div class='player-row'>", unsafe_allow_html=True)
+            col1, col2, col3 = st.columns([1, 1, 1])
+            
+            with col1:
+                st.write(f"{i+1}. {player}")
+            
+            with col2:
+                position = st.selectbox(
+                    "Position",
+                    POSITIONS,
+                    index=POSITIONS.index(roster_data["positions"][player]),
+                    key=f"pos_{i}",
+                    label_visibility="collapsed"
+                )
+                if position != roster_data["positions"][player]:
+                    roster_data["positions"][player] = position
+                    updated = True
+            
+            with col3:
+                alternate = st.text_input(
+                    "Alternate",
+                    value=roster_data["alternates"][player],
+                    key=f"alt_{i}",
+                    label_visibility="collapsed"
+                )
+                if alternate != roster_data["alternates"][player]:st.markdown("""
+                    roster_data["alternates"][player] = alternate
+                    updated = True
+
+            # Inline buttons
             col4, col5, col6 = st.columns([1, 1, 1])
             with col4:
                 if st.button("❌", key=f"remove_{i}", help="Remove player"):
@@ -146,8 +164,8 @@ def roster_management_page():
                 if st.button("⬇️", key=f"down_{i}", help="Move down", disabled=(i == len(roster_data["roster"]) - 1)):
                     roster_data["roster"][i], roster_data["roster"][i+1] = roster_data["roster"][i+1], roster_data["roster"][i]
                     updated = True
-
-        st.markdown("---")
+            
+            st.markdown("</div>", unsafe_allow_html=True)
 
     # Save changes if any updates were made
     if updated:
@@ -158,13 +176,16 @@ def batting_order_page():
     st.subheader("Batting Order")
     roster_data = load_roster()
     
+    st.markdown("<div class='batting-order'>", unsafe_allow_html=True)
     for i, player in enumerate(roster_data["roster"]):
         position = roster_data["positions"][player]
         alternate = roster_data["alternates"][player]
+        st.markdown(f"<div class='player-row'>", unsafe_allow_html=True)
         st.markdown(f"**{i+1}. {player}** - {position}")
         if alternate:
-            st.write(f"Alternate: {alternate}")
-        st.write("---")
+            st.markdown(f"<small>Alternate: {alternate}</small>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 def main():
     st.title("Shady Sluggers Team Roster")
