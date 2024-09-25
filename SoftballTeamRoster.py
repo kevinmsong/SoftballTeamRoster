@@ -104,13 +104,13 @@ def main():
                 roster_data["positions"][player] = position
                 updated = True
         
-        with col3:with col3:
+        with col3:
             alternate = st.text_input(
                 "Alternate",
                 value=roster_data["alternates"][player],
                 key=f"alt_{i}"
             )
-            if alternate != roster_data["alternates"][player]:
+            if alternate != roster_data["alternates"][player]:if alternate != roster_data["alternates"][player]:
                 roster_data["alternates"][player] = alternate
                 updated = True
 
