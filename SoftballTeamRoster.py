@@ -147,7 +147,7 @@ def roster_management_page():
                     roster_data["roster"][i], roster_data["roster"][i+1] = roster_data["roster"][i+1], roster_data["roster"][i]
                     updated = True
 
-        st.markdown("---")st.markdown("---")
+        st.markdown("---")
 
     # Save changes if any updates were made
     if updated:
