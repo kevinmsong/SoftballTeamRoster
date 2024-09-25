@@ -204,7 +204,7 @@ def batting_order_page():
             </div>
             {f"<div class='player-alternate'>Alt: {alternate}</div>" if alternate else ""}
         </div>
-        """, unsafe_allow_html=True)""", unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 def main():
