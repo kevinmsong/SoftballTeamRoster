@@ -5,9 +5,9 @@ Streamlit roster manager for the “Shady Sluggers” softball team: edit player
 ## Features
 
 - Roster Management page: add players with a default position, edit position and alternate, reorder (up/down), remove
-- Softpositions: Pitcher, Catcher, First Base, Second Base, Third Base, Shortstop, Left Fielder, Center Fielder, Right Fielder
+- Positions: Pitcher, Catcher, First Base, Second Base, Third Base, Shortstop, Left Fielder, Center Fielder, Right Fielder
 - Batting Order page: read-only list of current roster order with position and optional alternate
-- Mobile-oriented layout CSS; in-app version label 1.2
+- Mobile-friendly layout (custom CSS); in-app version label 1.2
 - Persistence via `roster_data.json` (`roster`, `positions`, `alternates`); empty starter file ships with the repo
 
 ## Requirements
